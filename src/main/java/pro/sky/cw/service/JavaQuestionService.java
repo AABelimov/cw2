@@ -1,35 +1,42 @@
 package pro.sky.cw.service;
 
+import org.springframework.stereotype.Service;
 import pro.sky.cw.domain.Question;
 
-import java.util.Collection;
-import java.util.Set;
+import java.util.*;
 
+@Service
 public class JavaQuestionService implements QuestionService {
-    Set<Question> questions;
+    private final Set<Question> questions = new HashSet<>();
 
     @Override
     public Question add(String question, String answer) {
-        return null;
+        Question item = new Question(question, answer);
+        questions.add(item);
+        return item;
     }
 
     @Override
     public Question add(Question question) {
-        return null;
+        questions.add(question);
+        return question;
     }
 
     @Override
     public Question remove(Question question) {
-        return null;
+        questions.remove(question);
+        return question;
     }
 
     @Override
     public Collection<Question> getAll() {
-        return null;
+        return questions;
     }
 
     @Override
     public Question getRandomQuestion() {
-        return null;
+        int max = questions.size();
+        List<Question> questionsList = new ArrayList<>(questions);
+        return questionsList.get((int) (Math.random() * max));
     }
 }
