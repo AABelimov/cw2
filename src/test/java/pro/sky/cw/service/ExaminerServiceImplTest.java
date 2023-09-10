@@ -1,8 +1,8 @@
 package pro.sky.cw.service;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import pro.sky.cw.domain.Question;
@@ -16,34 +16,63 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class ExaminerServiceImplTest {
     @Mock
-    private QuestionService questionServiceMock;
+    private QuestionService javaQuestionServiceMock;
 
-    @InjectMocks
+    @Mock
+    private QuestionService mathQuestionServiceMock;
+
     private ExaminerServiceImpl out;
 
-    private final Collection<Question> questions = new HashSet<>(Set.of(
+    @BeforeEach
+    public void initOut() {
+        out = new ExaminerServiceImpl(javaQuestionServiceMock, mathQuestionServiceMock);
+    }
+
+    private final Collection<Question> javaQuestions = new HashSet<>(Set.of(
             new Question("qwe", "ewq"),
             new Question("asd", "dsa"),
             new Question("zxc", "cxz")));
 
+    private final Collection<Question> mathQuestions = new HashSet<>(Set.of(
+            new Question("123", "321"),
+            new Question("234", "432"),
+            new Question("345", "543")));
+
+    private final Collection<Question> questions = new HashSet<>(Set.of(
+            new Question("qwe", "ewq"),
+            new Question("asd", "dsa"),
+            new Question("zxc", "cxz"),
+            new Question("123", "321"),
+            new Question("234", "432"),
+            new Question("345", "543")));
+
     @Test
     void shouldReturnExceptionWhenAmountIncorrect() {
-        when(questionServiceMock.getAll()).thenReturn(questions);
+        when(mathQuestionServiceMock.getAll()).thenReturn(mathQuestions);
+        when(javaQuestionServiceMock.getAll()).thenReturn(javaQuestions);
 
-        assertThrows(IncorrectAmountOfQuestionsException.class, () -> out.getQuestions(questions.size() + 1));
+        assertThrows(IncorrectAmountOfQuestionsException.class, () -> out.getQuestions(7));
     }
 
     @Test
     void shouldReturnSetWithAmountQuestions() {
-        when(questionServiceMock.getAll()).thenReturn(questions);
-        when(questionServiceMock.getRandomQuestion()).thenReturn(
+        when(mathQuestionServiceMock.getAll()).thenReturn(mathQuestions);
+        when(javaQuestionServiceMock.getAll()).thenReturn(javaQuestions);
+        when(javaQuestionServiceMock.getRandomQuestion()).thenReturn(
                 new Question("qwe", "ewq"),
                 new Question("zxc", "cxz"),
                 new Question("zxc", "cxz"),
                 new Question("asd", "dsa"),
                 new Question("qwe", "ewq")
         );
+        when(mathQuestionServiceMock.getRandomQuestion()).thenReturn(
+                new Question("123", "321"),
+                new Question("345", "543"),
+                new Question("345", "543"),
+                new Question("234", "432"),
+                new Question("123", "321")
+        );
 
-        assertIterableEquals(questions, out.getQuestions(3));
+        assertEquals(questions, out.getQuestions(6));
     }
 }

@@ -11,12 +11,12 @@ import pro.sky.cw.service.QuestionService;
 import java.util.Collection;
 
 @RestController
-@RequestMapping("/exam/java")
-public class JavaController {
+@RequestMapping("/exam/math")
+public class MathQuestionController {
 
     private final QuestionService service;
 
-    public JavaController(@Qualifier("javaQuestionService") QuestionService service) {
+    public MathQuestionController(@Qualifier("mathQuestionService") QuestionService service) {
         this.service = service;
     }
 

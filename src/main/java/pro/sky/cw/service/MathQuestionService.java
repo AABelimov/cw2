@@ -8,10 +8,10 @@ import pro.sky.cw.repository.QuestionRepository;
 import java.util.*;
 
 @Service
-public class JavaQuestionService implements QuestionService {
+public class MathQuestionService implements QuestionService {
     private final QuestionRepository questions;
 
-    public JavaQuestionService(@Qualifier("javaQuestionRepository") QuestionRepository questions) {
+    public MathQuestionService(@Qualifier("mathQuestionRepository") QuestionRepository questions) {
         this.questions = questions;
     }
 
