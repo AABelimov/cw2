@@ -5,33 +5,31 @@ import org.springframework.stereotype.Service;
 import pro.sky.cw.domain.Question;
 import pro.sky.cw.exception.IncorrectAmountOfQuestionsException;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class ExaminerServiceImpl implements ExaminerService {
 
-    private final QuestionService javaQuestionService;
-    private final QuestionService mathQuestionService;
+    private final List<QuestionService> questionServices;
 
     public ExaminerServiceImpl(@Qualifier("javaQuestionService") QuestionService javaQuestionService,
                                @Qualifier("mathQuestionService") QuestionService mathQuestionService) {
-        this.javaQuestionService = javaQuestionService;
-        this.mathQuestionService = mathQuestionService;
+        questionServices = new ArrayList<>();
+        questionServices.add(javaQuestionService);
+        questionServices.add(mathQuestionService);
     }
 
     @Override
     public Collection<Question> getQuestions(int amount) {
-        if (amount > javaQuestionService.getAll().size() + mathQuestionService.getAll().size()) {
+        if (amount > questionServices.get(0).getAll().size() * 2) {
             throw new IncorrectAmountOfQuestionsException();
         }
         Set<Question> questions = new HashSet<>();
 
         while (questions.size() < amount) {
-            questions.add(javaQuestionService.getRandomQuestion());
+            questions.add(questionServices.get(0).getRandomQuestion());
             if (questions.size() < amount) {
-                questions.add(mathQuestionService.getRandomQuestion());
+                questions.add(questionServices.get(1).getRandomQuestion());
             }
         }
         return questions;

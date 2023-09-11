@@ -1,44 +1,44 @@
 package pro.sky.cw.service;
 
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import pro.sky.cw.domain.Question;
-import pro.sky.cw.repository.QuestionRepository;
+import pro.sky.cw.exception.MethodNotAllowedException;
 
 import java.util.*;
 
 @Service
 public class MathQuestionService implements QuestionService {
-    private final QuestionRepository questions;
+    private final Random random;
 
-    public MathQuestionService(@Qualifier("mathQuestionRepository") QuestionRepository questions) {
-        this.questions = questions;
+    public MathQuestionService(Random random) {
+        this.random = random;
     }
 
     @Override
     public Question add(String question, String answer) {
-        return questions.add(question, answer);
+        throw new MethodNotAllowedException();
     }
 
     @Override
     public Question add(Question question) {
-        return questions.add(question);
+        throw new MethodNotAllowedException();
     }
 
     @Override
     public Question remove(Question question) {
-        return questions.remove(question);
+        throw new MethodNotAllowedException();
     }
 
     @Override
     public Collection<Question> getAll() {
-        return questions.getAll();
+        throw new MethodNotAllowedException();
     }
 
     @Override
     public Question getRandomQuestion() {
-        int max = questions.getAll().size();
-        List<Question> questionsList = new ArrayList<>(questions.getAll());
-        return questionsList.get((int) (Math.random() * max));
+        String question = Integer.toString(random.nextInt(900) + 100);
+        StringBuilder answer = new StringBuilder(question);
+        answer.reverse();
+        return new Question(question, answer.toString());
     }
 }

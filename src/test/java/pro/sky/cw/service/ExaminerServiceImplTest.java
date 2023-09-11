@@ -33,10 +33,6 @@ class ExaminerServiceImplTest {
             new Question("asd", "dsa"),
             new Question("zxc", "cxz")));
 
-    private final Collection<Question> mathQuestions = new HashSet<>(Set.of(
-            new Question("123", "321"),
-            new Question("234", "432"),
-            new Question("345", "543")));
 
     private final Collection<Question> questions = new HashSet<>(Set.of(
             new Question("qwe", "ewq"),
@@ -48,7 +44,6 @@ class ExaminerServiceImplTest {
 
     @Test
     void shouldReturnExceptionWhenAmountIncorrect() {
-        when(mathQuestionServiceMock.getAll()).thenReturn(mathQuestions);
         when(javaQuestionServiceMock.getAll()).thenReturn(javaQuestions);
 
         assertThrows(IncorrectAmountOfQuestionsException.class, () -> out.getQuestions(7));
@@ -56,7 +51,6 @@ class ExaminerServiceImplTest {
 
     @Test
     void shouldReturnSetWithAmountQuestions() {
-        when(mathQuestionServiceMock.getAll()).thenReturn(mathQuestions);
         when(javaQuestionServiceMock.getAll()).thenReturn(javaQuestions);
         when(javaQuestionServiceMock.getRandomQuestion()).thenReturn(
                 new Question("qwe", "ewq"),
